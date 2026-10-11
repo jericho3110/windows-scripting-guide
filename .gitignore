@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.ruff_cache/
+.venv/
+venv/
+.env
+*.log
+freeze.txt
+.DS_Store
+Thumbs.db
