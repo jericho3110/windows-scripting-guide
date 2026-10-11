@@ -109,8 +109,9 @@ foreach ($p in $plan) {
         # A venv's launchers (pip.exe...) hold its old absolute path; the fix needs the network, so it's left to you.
         Write-Host "  NOTE: $($p.To)\.venv needs repair (docs/WRITING_THE_SCRIPT.md, 'The venv'):" -ForegroundColor Yellow
         Write-Host '    python -m venv --upgrade .venv'
-        Write-Host '    .venv\Scripts\python -m pip freeze --exclude-editable > freeze.txt'
+        Write-Host '    .venv\Scripts\python -m pip freeze --all --exclude-editable > freeze.txt'
         Write-Host '    .venv\Scripts\python -m pip install --force-reinstall --no-deps -r freeze.txt'
+        Write-Host '    then: fix the activate scripts and reinstall editable packages (docs/WRITING_THE_SCRIPT.md section 8)'
     }
 }
 

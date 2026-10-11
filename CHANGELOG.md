@@ -2,6 +2,12 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions: [SemVer](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-10-11
+
+### Fixed
+- `WRITING_THE_SCRIPT.md` §8 said `python -m venv --upgrade` rewrites the activate scripts. It doesn't (`venv/__init__.py` skips `setup_scripts` when upgrading); found on a second real move. The section now says so and gives the fix.
+- The venv repair hint printed by `move_folders.ps1` now uses `pip freeze --all`: without it pip itself is left out and `pip.exe` stays broken.
+
 ## [0.1.0] - 2026-10-11
 
 ### Added

@@ -252,15 +252,27 @@ reopened editor was locking it again. The repair that worked, done in place:
 
 ```text
 python -m venv --upgrade .venv
-    # rewrites pyvenv.cfg and the activate scripts for the new location
-.venv\Scripts\python -m pip freeze --exclude-editable > freeze.txt
-    # the exact versions installed now (minus the project's own editable install)
+    # rewrites pyvenv.cfg (NOT the activate scripts: see the correction below)
+.venv\Scripts\python -m pip freeze --all --exclude-editable > freeze.txt
+    # the exact versions installed now, including pip itself (minus editable installs)
 .venv\Scripts\python -m pip install --force-reinstall --no-deps -r freeze.txt
     # reinstall the same versions; this regenerates every launcher
 ```
 
 Afterwards every launcher exited 0. `--no-deps` with a frozen list means
-nothing is upgraded by surprise. Version 2 **prints** these commands
+nothing is upgraded by surprise.
+
+**Correction (2026-10-11, found on a second move):** an earlier version of
+this section said `venv --upgrade` rewrites the activate scripts. **It
+doesn't**: `venv/__init__.py` runs `setup_scripts` only `if not
+self.upgrade`. `activate`, `activate.bat` and `activate.fish` keep the
+old folder. (`Activate.ps1` works anyway, because it finds its own folder
+at run time.) Two more gaps: without `--all`, `pip freeze` leaves out pip,
+so `pip.exe` stays broken; and editable installs keep pointing at the old
+folder. Fixes: replace the old path in the `VIRTUAL_ENV=` line of those
+three activate scripts with the venv's real folder, and run
+`pip install --no-deps -e <new path>` for each package listed by
+`pip list --editable`. Version 2 **prints** these commands
 instead of running them. They need the network and can fail in ways a
 person should see, so the script stays an offline tool that only renames.
 
